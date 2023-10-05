@@ -20,7 +20,7 @@ Subscribe RSS of Anime Torrent sites and call cloudreve offline downloading to g
 <br>
 ### Use Github Action
 1. Fork the repo
-2. Use your own information to set the needed secrets in your repo(Repo Settings -- Secrets and variables -- Actions -- Secrets). You need an email with SMTP host, port, account and app password. Check out [User config](#(User%20config)) for the full config we need.
+2. Use your own information to set the needed secrets in your repo(Repo Settings -- Secrets and variables -- Actions -- Secrets). You need an email with SMTP host, port, account and app password. Check out [User config](#(User-config)) for the full config we need.
 ![](docs/add_secrets.png)
 3. Write your subscriptions into `subscriptions`. One sub occupies one line. In single line, the first two element represents rss source (acgrip, mikann, dmhy or ...) and `folder name` of the anime to be saved in your cloudreve. Note that this dir is relative to the `download_dir` in the user config. The remaining things are your keywords to match in the RSS title. The keyword number is not limited. Lastly, every element should be separated by `|` with no space (But space is allowed inside keyword).
 4. Enable Workflow r/w permissions
@@ -34,7 +34,7 @@ Then the action will be triggered when pushing to repo or reaching a certain tim
 ```
 wget https://github.com/Freddd13/cloudreve-anisub/blob/main/localconfig.yaml?raw=true -O .localconfig.yaml
 ```
-2. Replace your own data in the yaml above. Check out [User config](#(User%20config)) for the full config we need. (The varaible name is for env, but it should be easily understood for yaml.)
+2. Replace your own data in the yaml above. Check out [User config](#(User-config)) for the full config we need. (The varaible name is for env, but it should be easily understood for yaml.)
 3. Enable Workflow r/w permissions
 3. Download image and run:
 ```
@@ -45,7 +45,7 @@ docker run -d --name cloudreve-anisub -v $(pwd)/.localconfig.yaml:/app/.localcon
 ## Develop
 ### Run locally
 1. Clone this repo
-2. Create a .localconfig.yaml from localconfig.yaml and fill in your data. Check out [User config](#(User%20config)) for the full config we need. (The varaible name is for env, but it should be easily understood for yaml.)
+2. Create a .localconfig.yaml from localconfig.yaml and fill in your data. Check out [User config](#(User-config)) for the full config we need. (The varaible name is for env, but it should be easily understood for yaml.)
 3. Enable Workflow r/w permissions
 3. `pip install -r requirements.txt`
 4. Set env `CLOUDREVE_ANISUB_ENV` to `LOCAL`
