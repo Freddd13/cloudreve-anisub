@@ -24,7 +24,6 @@ def parse_last_download(lines):
 if __name__ == "__main__":
     ## 0. get config
     env = os.environ.get('CLOUDREVE_ANISUB_ENV')
-    env = "LOCAL"
     assert env
 
     if env == "LOCAL":
