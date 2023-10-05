@@ -92,6 +92,7 @@ if __name__ == "__main__":
                 else:
                     logger.warning("No new link found")
             else:
+                all_tasks_success = False
                 logger.error(f"Failed when create_directory {save_folder} in cloudreve.")
 
         else:
