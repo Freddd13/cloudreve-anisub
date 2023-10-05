@@ -1,7 +1,7 @@
 '''
 Date: 2023-10-05 11:08:46
 LastEditors: Kumo
-LastEditTime: 2023-10-05 18:26:59
+LastEditTime: 2023-10-05 18:59:45
 Description: 
 '''
 from .utils.logger import LoggerManager
@@ -15,6 +15,7 @@ from requests.packages.urllib3.util.retry import Retry
 log_manager = LoggerManager(f"log/{__name__}.log")
 logger = log_manager.logger
 
+@log_manager.apply_log_method_to_all_methods
 class Cloudreve:
     def __init__(self, email, password, url):
         self._email = email

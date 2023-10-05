@@ -9,7 +9,7 @@ Subscribe RSS of Anime Torrent sites and call cloudreve offline downloading to g
 | `Cloudreve_password`            | Password for the Cloudreve.                        | `passwordiiyokoiyo`          |
 | `Cloudreve_url`     | Cloudreve_url.                   | yourcloudreve.com      |
 | `download_dir`     | Cloudreve download base dir. (The first `/` means that the path is relative to cloudreve root thus it's necessary.)                   |   /anime_download/cloudreve_anisub    |
-| `acgrip_url(example)`                 | URL of the RSS feed.                               | `https://acg.rip`|
+| `acgrip_url(example，there're other sources)`                 | URL of the RSS feed.                               | `https://acg.rip`|
 | `acgrip_enable(example)` | Whether to enable this rss source  | `1`  (currently not used)                    |
 | `enable_email_notify`      | Whether to notify downloading result via email  (1 enable, 0 disable)  | `1` |
 | `Email_sender`            | Email address used to send emails.                 | `sender@example.com`   |

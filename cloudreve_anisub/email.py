@@ -1,7 +1,7 @@
 '''
 Date: 2023-10-05 11:09:30
 LastEditors: Kumo
-LastEditTime: 2023-10-05 18:24:13
+LastEditTime: 2023-10-05 18:58:04
 Description: 
 '''
 from .utils.logger import LoggerManager
@@ -38,24 +38,11 @@ class EmailHandler:
         for file in files:
             filename = os.path.basename(file)
             logger.debug("sending filename: "+filename)
-            # att = MIMEText(open(file, 'rb').read())
-            # att["Content-Type"] = 'application/octet-stream'
-            # att["Content-Disposition"] = 'attachment; filename=' + '\"'+ filename +'\"'
+            att = MIMEText(open(file, 'r').read(), 'base64', 'utf-8')
+            att["Content-Type"] = 'application/octet-stream'
+            att["Content-Disposition"] = 'attachment; filename=' + '\"'+ filename +'\"'
+            message.attach(att)
 
-            with open(file, "rb") as f:
-                #attach = email.mime.application.MIMEApplication(f.read(),_subtype="pdf")
-                attach = MIMEApplication(f.read(),_subtype="pdf")
-            attach.add_header('Content-Disposition','attachment',filename=filename)
-            message.attach(attach)
-
-        # log file
-        # logger.debug(LOG_PATH)
-        # logger.debug(os.getcwd())
-        filename = os.path.basename(LOG_PATH)
-        att = MIMEText(open(LOG_PATH, 'rb').read(), 'base64', 'utf-8')
-        att["Content-Type"] = 'application/octet-stream'
-        att["Content-Disposition"] = 'attachment; filename=' + '\"'+ filename +'\"'
-        message.attach(att)
 
         try:
             context=ssl.create_default_context()
@@ -67,5 +54,5 @@ class EmailHandler:
 
         except Exception as e:
             logger.error(str(e))
-            logger.error("无法发送邮件")
+            logger.error("Fail to send mail!")
 

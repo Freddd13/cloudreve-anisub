@@ -24,6 +24,7 @@ def parse_last_download(lines):
 if __name__ == "__main__":
     ## 0. get config
     env = os.environ.get('CLOUDREVE_ANISUB_ENV')
+    env = "LOCAL"
     assert env
 
     if env == "LOCAL":
@@ -127,7 +128,7 @@ if __name__ == "__main__":
     ## 5. send email
     if strategy.enable_email_notify:
         email_handler = EmailHandler(strategy.sender, strategy.smtp_host, strategy.smtp_port, strategy.mail_license, strategy.receivers)
-        email_handler.perform_sending(subject, content, files=logger.get_all_log_filenames())
+        email_handler.perform_sending(subject, content, files=LoggerManager.get_all_log_filenames())
 
 
 
