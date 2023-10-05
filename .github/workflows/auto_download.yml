@@ -1,0 +1,77 @@
+name: auto download
+
+on:
+  workflow_dispatch: 
+  schedule:
+    - cron: '0 8 * * *'
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x  # 指定 Python 版本
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run Python script
+      env:
+        CLOUDREVE_ANISUB_ENV: GITHUB_ACTION
+
+        Cloudreve_email: ${{ secrets.Cloudreve_email }}
+        Cloudreve_password: ${{ secrets.Cloudreve_password }}
+        Cloudreve_url: ${{ secrets.Cloudreve_url }}
+        Cloudreve_download_dir: ${{ secrets.Cloudreve_download_dir }}
+
+
+        acgrip_enable: ${{ secrets.acgrip_enable }}
+        acgrip_url: ${{ secrets.acgrip_url }}
+
+        bangumi_moe_enable: ${{ secrets.bangumi_moe_enable }}
+        bangumi_moe_url: ${{ secrets.bangumi_moe_url }}
+
+        mikan_enable: ${{ secrets.mikan_enable }}
+        mikan_url: ${{ secrets.mikan_url }}
+
+        nyaa_enable: ${{ secrets.nyaa_enable }}
+        nyaa_url: ${{ secrets.nyaa_url }}
+        
+        
+        enable_email_notify: ${{ secrets.enable_email_notify }}
+        Email_sender: ${{ secrets.Email_sender }}
+        Email_receivers: ${{ secrets.Email_receivers }}
+        Email_smtp_host: ${{ secrets.Email_smtp_host }}
+        Email_smtp_port: ${{ secrets.Email_smtp_port }}
+        Email_mail_license: ${{ secrets.Email_mail_license }}
+
+        # GITHUB_REPO_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        # REPO_NAME: ${{ github.event.repository.name }}  # https://stackoverflow.com/questions/62803531/repository-name-as-a-github-action-environment-variable
+        # GITHUB_OWNER_REPO: ${{ github.repository }}
+        # LAST_SUCCESS_VIDEO_TIME: ${{ vars.LAST_SUCCESS_VIDEO_TIME }}
+
+        IGNORE_HISTORY_DOWNLOAD: 1
+
+      run: python main.py
+
+    - name: Setup GIT user
+      uses: fregante/setup-git-user@v1
+
+    - name: Update last download signal
+      run: |
+        git add .
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update last success time"
+          git push
+        fi

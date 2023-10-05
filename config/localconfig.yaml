@@ -1,0 +1,31 @@
+Cloudreve:
+  email: xxx@xxx.com
+  password: 1145141919810
+  url: https://yourcloudreve.xxx # Cloudreve url
+  download_dir: /anime_download/cloudreve_anisub  # download base dir
+
+RSS:
+  acgrip:
+    enable: true
+    url: https://acg.rip  # RSS url
+
+  bangumi_moe:
+    enable: true
+    url: https://acg.rip/.xml
+
+  mikan:
+    enable: true
+    url: https://acg.rip/.xml
+
+  nyaa:
+    enable: false
+    url: https://acg.rip/.xml
+
+    
+Email:
+  enable_email_notify: 0
+  sender: yourmail@xxx.com
+  receivers: ['xxxx@xxx.com']
+  smtp_host: xxx.xxxxxx.xxx
+  smtp_port: 587
+  mail_license: 1145141919810

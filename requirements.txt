@@ -1,0 +1,6 @@
+feedparser
+requests
+pytz
+msal
+tqdm
+pyyaml
