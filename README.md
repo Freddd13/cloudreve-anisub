@@ -18,6 +18,7 @@ Subscribe RSS of Anime Torrent sites and call cloudreve offline downloading to g
 | `Email_smtp_port`         | SMTP server port used to send emails.              | `11451`                  |
 | `Email_mail_license`      | SMTP password or authorization used for sending emails.  | `1145141919810`  |
 <br>
+
 ### Use Github Action
 1. Fork the repo
 2. Use your own information to set the needed secrets in your repo(Repo Settings -- Secrets and variables -- Actions -- Secrets). You need an email with SMTP host, port, account and app password. Check out [User config](#(User-config)) for the full config we need.
