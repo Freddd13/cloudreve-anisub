@@ -32,7 +32,7 @@ Then the action will be triggered when pushing to repo or reaching a certain tim
 ### Use Docker
 1. Download the config file:
 ```
-wget https://github.com/Freddd13/auto-Halcyon/blob/main/localconfig.yaml?raw=true -O .localconfig.yaml
+wget https://github.com/Freddd13/cloudreve-anisub/blob/main/localconfig.yaml?raw=true -O .localconfig.yaml
 ```
 2. Replace your own data in the yaml above. Check out [User config](#(User%20config)) for the full config we need. (The varaible name is for env, but it should be easily understood for yaml.)
 3. Enable Workflow r/w permissions
