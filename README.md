@@ -84,7 +84,7 @@ The `enable_email_notify` is used to send you downloading result including sheet
 # Disclaimer:
 The scripts provided in this repo is intended for personal use and convenience. It is the user's responsibility to use this tool in accordance with the terms of service and policies of anime.
 
-The author of this repo shall not be held responsible for any misuse or improper use of this tool, including but not limited to any violations of MMS's terms of service, copyright infringement, or any other legal or ethical concerns.
+The author of this repo shall not be held responsible for any misuse or improper use of this tool, including but not limited to any violations of related terms of service, copyright infringement, or any other legal or ethical concerns.
 
 Users are advised to exercise discretion and adhere to all applicable laws and regulations when using this tool. The author of this tool disclaim all liability for any consequences resulting from the use of this tool.
 

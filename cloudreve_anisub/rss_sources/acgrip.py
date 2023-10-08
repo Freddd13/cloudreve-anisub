@@ -1,7 +1,7 @@
 '''
 Date: 2023-10-05 10:52:28
 LastEditors: Kumo
-LastEditTime: 2023-10-05 18:25:14
+LastEditTime: 2023-10-08 16:06:11
 Description: 
 '''
 
@@ -129,7 +129,7 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
         if not last_timestamp:
            last_timestamp = -1
 
-        for entry in self.get_latest_entries(keywords):
+        for entry in self.get_latest_entries(keywords).entries:
             # time_string = "Wed, 04 Oct 2023 08:31:55 -0700"
             dt = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %z")
             this_timestamp = dt.timestamp()
