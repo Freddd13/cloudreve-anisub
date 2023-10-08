@@ -20,10 +20,12 @@ Then the action will be triggered when pushing to repo or reaching a certain tim
 wget https://github.com/Freddd13/cloudreve-anisub/blob/main/localconfig.yaml?raw=true -O .localconfig.yaml
 ```
 2. Replace your own data in the yaml above. Check out [User config](#(User-config)) for the full config we need. (The varaible name is for env, but it should be easily understood for yaml.)
-3. Enable Workflow r/w permissions
 3. Download image and run:
 ```
+# 1. pull the image
 docker pull fredyu13/cloudreve-anisub
+# 2. (optional) set your trigger time in crontab, see docker/crontab.
+# 3. run a container from the image
 docker run -d --name cloudreve-anisub -v $(pwd)/.localconfig.yaml:/app/.localconfig.yaml fredyu13/cloudreve-anisub
 ```
 
