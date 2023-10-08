@@ -2,22 +2,6 @@
 Periodically subscribe RSS from Anime Torrent sites and call cloudreve offline downloading to get you latest animes.
 
 ## Usage
-### User config
-| Variable                  | Description                                         | Example Value          |
-|---------------------------|-----------------------------------------------------|------------------------|
-| `Cloudreve_email`               | Email associated with Cloudreve website.                | `user@example.com`     |
-| `Cloudreve_password`            | Password for the Cloudreve.                        | `passwordiiyokoiyo`          |
-| `Cloudreve_url`     | Cloudreve_url.                   | yourcloudreve.com      |
-| `download_dir`     | Cloudreve download base dir. (The first `/` means that the path is relative to cloudreve root thus it's necessary.)                   |   /anime_download/cloudreve_anisub    |
-| `acgrip_url(example，there're other sources)`                 | URL of the RSS feed.                               | `https://acg.rip`|
-| `acgrip_enable(example)` | Whether to enable this rss source  | `1`  (currently not used)                    |
-| `enable_email_notify`      | Whether to notify downloading result via email  (1 enable, 0 disable)  | `1` |
-| `Email_sender`            | Email address used to send emails.                 | `sender@example.com`   |
-| `Email_receivers`         | Email addresses designated to receive emails.      | `receiver@example.com` |
-| `Email_smtp_host`         | SMTP server address used to send emails.           | `smtp.example.com`     |
-| `Email_smtp_port`         | SMTP server port used to send emails.              | `11451`                  |
-| `Email_mail_license`      | SMTP password or authorization used for sending emails.  | `1145141919810`  |
-<br>
 
 ### Use Github Action
 1. Fork the repo
@@ -42,6 +26,23 @@ wget https://github.com/Freddd13/cloudreve-anisub/blob/main/localconfig.yaml?raw
 docker pull fredyu13/cloudreve-anisub
 docker run -d --name cloudreve-anisub -v $(pwd)/.localconfig.yaml:/app/.localconfig.yaml fredyu13/cloudreve-anisub
 ```
+
+### User config
+| Variable                  | Description                                         | Example Value          |
+|---------------------------|-----------------------------------------------------|------------------------|
+| `Cloudreve_email`               | Email associated with Cloudreve website.                | `user@example.com`     |
+| `Cloudreve_password`            | Password for the Cloudreve.                        | `passwordiiyokoiyo`          |
+| `Cloudreve_url`     | Cloudreve_url.                   | yourcloudreve.com      |
+| `download_dir`     | Cloudreve download base dir. (The first `/` means that the path is relative to cloudreve root thus it's necessary.)                   |   /anime_download/cloudreve_anisub    |
+| `acgrip_url(example，there're other sources)`                 | URL of the RSS feed.                               | `https://acg.rip`|
+| `acgrip_enable(example)` | Whether to enable this rss source  | `1`  (currently not used)                    |
+| `enable_email_notify`      | Whether to notify downloading result via email  (1 enable, 0 disable)  | `1` |
+| `Email_sender`            | Email address used to send emails.                 | `sender@example.com`   |
+| `Email_receivers`         | Email addresses designated to receive emails.      | `receiver@example.com` |
+| `Email_smtp_host`         | SMTP server address used to send emails.           | `smtp.example.com`     |
+| `Email_smtp_port`         | SMTP server port used to send emails.              | `11451`                  |
+| `Email_mail_license`      | SMTP password or authorization used for sending emails.  | `1145141919810`  |
+
 
 ## Develop
 ### Run locally
