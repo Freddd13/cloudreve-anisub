@@ -78,8 +78,8 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
         for entry in self._feed.entries:
             # match Keywords
             if not all(keyword in entry.title for keyword in keywords):
-                logger.debug(f"q keywords: {','.join(keywords)}")
-                logger.debug(f"this content: {entry.title}")
+                # logger.debug(f"q keywords: {','.join(keywords)}")
+                # logger.debug(f"this content: {entry.title}")
                 continue
             # time_string = "Wed, 04 Oct 2023 08:31:55 -0700"
             dt = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %z")
