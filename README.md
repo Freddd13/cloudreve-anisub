@@ -1,4 +1,4 @@
-# Cloudreve Anime Automatic Subscription
+# Automatic Anime Subscription using for Cloudreve
 Subscribe RSS of Anime Torrent sites and call cloudreve offline downloading to get you latest animes.
 
 ## Usage
