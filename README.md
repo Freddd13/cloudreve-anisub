@@ -1,5 +1,5 @@
 # Automatic Anime Subscription for Cloudreve
-Subscribe RSS of Anime Torrent sites and call cloudreve offline downloading to get you latest animes.
+Periodically subscribe RSS from Anime Torrent sites and call cloudreve offline downloading to get you latest animes.
 
 ## Usage
 ### User config
