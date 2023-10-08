@@ -125,7 +125,6 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
 
     def get_download_data(self, keywords, last_timestamp):
         # https://acg.rip/page/2?term=%E9%AD%94%E6%B3%95%E4%BD%BF%E7%9A%84%E6%96%B0%E5%A8%98
-
         entry_links, entry_timestamps = [], []
         if not last_timestamp:
            last_timestamp = -1
