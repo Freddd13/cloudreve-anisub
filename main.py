@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
         full_description = ''.join(parts)
         md5 = hashlib.md5(full_description.encode('utf-8')).hexdigest()
-        last_timestamp = last_downloads.get(md5)
+        last_timestamp = last_downloads.get(md5, -1)
         latest_timestamp = last_timestamp
         parser = GetInstance(source_name)
         if parser and parser.is_available:
