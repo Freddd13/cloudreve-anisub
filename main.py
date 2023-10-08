@@ -1,6 +1,8 @@
+from turtle import title
 from cloudreve_anisub.cloudreve import Cloudreve
 from cloudreve_anisub.email import EmailHandler
 from cloudreve_anisub.deploy_stragegies import *
+from cloudreve_anisub.utils.proxy_decorator import IS_AUTHOR_ENV
 
 from cloudreve_anisub.utils.singleton import GetInstance
 from cloudreve_anisub.utils.logger import LoggerManager
@@ -24,7 +26,9 @@ def parse_last_download(lines):
 if __name__ == "__main__":
     ## 0. get config
     env = os.environ.get('CLOUDREVE_ANISUB_ENV')
-    # env = "LOCAL"
+    if not env and IS_AUTHOR_ENV:
+        env = "LOCAL"
+
     assert env
     if env == "LOCAL":
         strategy = LocalStrategy()
@@ -63,6 +67,7 @@ if __name__ == "__main__":
     ## 3. for each sub, try to find new links in rss data and call cloudreve offline download
     all_tasks_success = True
     num_newly_downloads = 0
+    titles_newly_download = []
     latest_downloads = {}
     for sub in subscriptions:
         parts = sub.strip().split('|')
@@ -74,44 +79,47 @@ if __name__ == "__main__":
         full_description = ''.join(parts)
         md5 = hashlib.md5(full_description.encode('utf-8')).hexdigest()
         last_timestamp = last_downloads.get(md5, -1)
-        latest_timestamp = last_timestamp
+        latest_downloads[md5] = last_timestamp
+
         parser = GetInstance(source_name)
         if parser and parser.is_available:
             folder_to_root_dir = os.path.join(cloudreve_download_dir, save_folder).replace('\\','/')
-            if cloudreve.create_directory(folder_to_root_dir): # also ok when folder exists
-                links, max_timestamp = parser.get_download_data(keywords, last_timestamp)
-                if len(links) > 0:  # only call downloading when having something new
+            links, max_timestamp, titles = parser.get_download_data(keywords, last_timestamp)
+            if len(links) > 0:  # only call downloading when having something new
+                if cloudreve.create_directory(folder_to_root_dir): # also ok when folder exists
                     is_download_success = cloudreve.add_offline_download_task(links, folder_to_root_dir)
                     if is_download_success:
-                        latest_timestamp = max_timestamp
                         num_newly_downloads += len(links)
+                        latest_downloads[md5] = max_timestamp
+                        titles_newly_download.extend(titles)
                         logger.info(f"Successfully download {len(links)} links into {save_folder}.")
-                    else:
+                    else:   # failed when downloading
                         all_tasks_success = False
                         logger.error(f"Failed when downloading {keywords} in RSS source {source_name}.")
-                else:
-                    logger.warning("No new link found")
-            else:
-                all_tasks_success = False
-                logger.error(f"Failed when create_directory {save_folder} in cloudreve.")
+                else:       # failed when create folder
+                    all_tasks_success = False
+                    logger.error(f"Failed when create_directory {save_folder} in cloudreve.")
+            else:   # nothing new
+                logger.warning("No new link found")
 
-        else:
+        else:   # failed when getting parser
             all_tasks_success = False
             logger.error(f"RSS source {source_name} is not available.")
 
-        latest_downloads[md5] = latest_timestamp
 
     ###  update download data
     with open(last_download_filename, 'w') as file:
         for md5, timestamp in latest_downloads.items():
-            if latest_timestamp:
+            if timestamp:
                 file.write(f'{md5} {timestamp}\n')
 
     ## 4. check result and prepare mail data
+    logger.info("=" * 50)
+    logger.info("summary: ")
     if all_tasks_success:
         if num_newly_downloads > 0:
             subject = "Successfully downloading animes."
-            content = "Success!"
+            content = "Success downloading the following anime(s):\n{}".format('\n'.join(str(titles_newly_download)))
             logger.info("All animes start to download successfully.")
 
         else:   # nothing new
@@ -123,6 +131,7 @@ if __name__ == "__main__":
         subject = "Failed to download all animes."
         content = "Failed..."
         logger.error("Failed to download all animes.")
+    logger.info("=" * 50)
 
 
     ## 5. send email

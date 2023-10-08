@@ -1,7 +1,7 @@
 '''
 Date: 2023-10-05 10:52:28
 LastEditors: Kumo
-LastEditTime: 2023-10-08 16:06:11
+LastEditTime: 2023-10-08 16:55:12
 Description: 
 '''
 
@@ -96,36 +96,12 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
         """    
         return feedparser.parse(merged_rss)     
 
-    # deprecate
-    def get_download_data_old(self, keywords, last_timestamp):
-        entry_links, entry_timestamps = [], []
-        if not last_timestamp:
-           last_timestamp = -1
-        for entry in self._feed.entries:
-            # match Keywords
-            if not all(keyword in entry.title for keyword in keywords):
-                # logger.debug(f"q keywords: {','.join(keywords)}")
-                # logger.debug(f"this content: {entry.title}")
-                continue
-            # time_string = "Wed, 04 Oct 2023 08:31:55 -0700"
-            dt = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %z")
-            this_timestamp = dt.timestamp()
 
-            if this_timestamp <= last_timestamp:
-                logger.warn("Nothing new")
-                break
-            
-            logger.info("标题:"+entry.title)
-
-            entry_links.append(entry.enclosures[0].href)
-            entry_timestamps.append(this_timestamp)
-
-        return entry_links, max(entry_timestamps) if entry_timestamps else 0
 
 
     def get_download_data(self, keywords, last_timestamp):
         # https://acg.rip/page/2?term=%E9%AD%94%E6%B3%95%E4%BD%BF%E7%9A%84%E6%96%B0%E5%A8%98
-        entry_links, entry_timestamps = [], []
+        entry_links, entry_timestamps, entry_titles = [], [], []
         if not last_timestamp:
            last_timestamp = -1
 
@@ -143,4 +119,32 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
             entry_links.append(entry.enclosures[0].href)
             entry_timestamps.append(this_timestamp)
 
-        return entry_links, max(entry_timestamps) if entry_timestamps else 0
+        return entry_links, max(entry_timestamps) if entry_timestamps else 0, entry_titles
+
+
+    # deprecate
+    # def get_download_data_old(self, keywords, last_timestamp):
+    #     entry_links, entry_timestamps, entry_titles = [], [], []
+    #     if not last_timestamp:
+    #        last_timestamp = -1
+    #     for entry in self._feed.entries:
+    #         # match Keywords
+    #         if not all(keyword in entry.title for keyword in keywords):
+    #             # logger.debug(f"q keywords: {','.join(keywords)}")
+    #             # logger.debug(f"this content: {entry.title}")
+    #             continue
+    #         # time_string = "Wed, 04 Oct 2023 08:31:55 -0700"
+    #         dt = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %z")
+    #         this_timestamp = dt.timestamp()
+
+    #         if this_timestamp <= last_timestamp:
+    #             logger.warn("Nothing new")
+    #             break
+            
+    #         logger.info("标题:"+entry.title)
+
+    #         entry_links.append(entry.enclosures[0].href)
+    #         entry_timestamps.append(this_timestamp)
+    #         entry_titles.append(entry.title)
+
+    #     return entry_links, max(entry_timestamps) if entry_timestamps else 0
