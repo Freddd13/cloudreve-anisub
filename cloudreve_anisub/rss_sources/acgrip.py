@@ -118,6 +118,7 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
 
             entry_links.append(entry.enclosures[0].href)
             entry_timestamps.append(this_timestamp)
+            entry_titles.append(entry.title)
 
         return entry_links, max(entry_timestamps) if entry_timestamps else 0, entry_titles
 
