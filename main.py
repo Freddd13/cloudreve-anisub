@@ -74,7 +74,8 @@ if __name__ == "__main__":
         assert(len(parts) >= 3)
         source_name = parts[0]
         save_folder = parts[1]
-        keywords = parts[2:]
+        direct_rss_url = parts[2]   #TODO
+        keywords = parts[3:]
 
         full_description = ''.join(parts)
         md5 = hashlib.md5(full_description.encode('utf-8')).hexdigest()

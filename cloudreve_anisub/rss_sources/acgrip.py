@@ -71,13 +71,13 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
         #     self._is_available = True
 
 
-    def get_latest_entries(self, keywords):
+    def get_latest_entries(self, keywords, direct_rss_url = None):
         num_pages_to_check = 5  # TODO
         all_items = []
         logger.info("requesting and merging rss data...")
         for i in range(num_pages_to_check):
             # https://acg.rip/.xml?term=ANi+%E9%AD%94%E6%B3%95%E4%BD%BF%E7%9A%84%E6%96%B0%E5%A8%98+%E7%AC%AC%E4%BA%8C%E5%AD%A3
-            url = f"{self._url}/page/{i+1}.xml?term={'+'.join(keywords)}"
+            url = f"{self._url}/page/{i+1}.xml?term={''.join(keywords)}"
             response = self._http.get(url,proxies=self._proxy_dict)
             if response.status_code == 200:
                 root = ET.fromstring(response.content)
