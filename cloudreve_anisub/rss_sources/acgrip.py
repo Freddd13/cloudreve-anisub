@@ -115,7 +115,8 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
                 logger.warn("Nothing new")
                 break
             
-            logger.info("标题:"+entry.title)
+            logger.debug(f"this_timestamp: {this_timestamp}, last_timestamp: {last_timestamp}")
+            logger.info(f"标题: {entry.title}")
 
             entry_links.append(entry.enclosures[0].href)
             entry_timestamps.append(this_timestamp)

@@ -71,7 +71,7 @@ if __name__ == "__main__":
     latest_downloads = {}
     for sub in subscriptions:
         parts = sub.strip().split('|')
-        assert(len(parts) >= 3)
+        assert(len(parts) >= 4)
         source_name = parts[0]
         save_folder = parts[1]
         direct_rss_url = parts[2]   #TODO
