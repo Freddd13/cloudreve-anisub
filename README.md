@@ -5,7 +5,7 @@ Periodically subscribe RSS from Anime Torrent sites and call cloudreve offline d
 
 ### Use Github Action
 1. Fork the repo
-2. Use your own information to set the needed secrets in your repo(Repo Settings -- Secrets and variables -- Actions -- Secrets). You need an email with SMTP host, port, account and app password. Check out [User config](#User-config) for the full config we need.
+2. Use your own information to set the needed secrets in your repo(Repo Settings -- Secrets and variables -- Actions -- Secrets). You may need an email with SMTP host, port, account and app password. Check out [User config](#User-config) for the full config we need.
 ![](docs/add_secrets.png)
 3. Write your subscriptions into `subscriptions`. One sub occupies one line. In single line, the first three element represents rss source (acgrip, mikann, dmhy or ...) `folder name` of the anime to be saved in your cloudreve and `direct rss url(optional)`. Note that this dir is relative to the `download_dir` in the user config. The remaining things are your keywords to match in the RSS title. For any keyword, you can simply use the content in url such as `能干的猫今天也忧郁+桜都字幕组` for acgrip, which `+, -, *` is supported. The keyword number is not limited. Lastly, every element should be separated by `|` with no space (But space is allowed inside keyword).
 4. Enable Workflow r/w permissions
