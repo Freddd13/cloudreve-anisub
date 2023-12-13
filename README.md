@@ -66,12 +66,6 @@ The schedule task can be adjusted by modifing the ./docker/crontab.
 ### About RSS
 - current only part of websites are supported, but you can implement yours by completing method according to the base_rss.py. Remember the source name in the `subscription` should be consistent with the `_name` in your class.
 
-
-
-### About Email
-The `enable_email_notify` is used to send you downloading result including sheets and app log. If you disable the email, there's still another way to save your sheets: remove the `MMS_savefolder_path` directory if it exists in the `.gitignore`. The action will update the downloaded sheets to your repo. But it's not a good behavior to share others' sheets without permission, thus it's not recommended to disable email before other uploading method is supported.
-
-
 ## TODO
 - [x] Email notification
 - [ ] Bot notification
