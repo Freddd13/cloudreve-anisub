@@ -18,6 +18,9 @@ b. Enable the auto download workflow: auto download-->Enable workflow
 ![](docs/enable_schedule.png)
 
 Then the action will be triggered when pushing to repo or reaching a certain time everyday. The latter can be set in the auto_download.yml. 
+To test whether your config is correct, you can run a test immediately following the steps below:
+![](docs/try_workflow.png)
+If you enable the email sending and set your mail data properly, you should receive an email with run data. You can also check the history running results from the actions tab.
 
 ### Use Docker
 1. Download the config file:
