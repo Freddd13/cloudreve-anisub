@@ -75,8 +75,8 @@ if __name__ == "__main__":
         source_name = parts[0]
         save_folder = parts[1]
         direct_rss_url = parts[2]   #TODO
-        max_day_interval = parts[3]   # older pub will not be downloaded
-        keywords = int(parts[4:])
+        max_day_interval = int(parts[3])   # older pub will not be downloaded
+        keywords = parts[4:]
 
         full_description = ''.join(parts)
         md5 = hashlib.md5(full_description.encode('utf-8')).hexdigest()
