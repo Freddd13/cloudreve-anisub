@@ -116,6 +116,7 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
             logger.debug(f"days_difference: {days_difference}")
             if days_difference > max_day_interval:
                 logger.warn("ignore old part resources.")
+                break
 
             if this_timestamp <= last_timestamp:
                 logger.warn("Nothing new")
