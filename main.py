@@ -71,11 +71,12 @@ if __name__ == "__main__":
     latest_downloads = {}
     for sub in subscriptions:
         parts = sub.strip().split('|')
-        assert(len(parts) >= 4)
+        assert(len(parts) >= 5)
         source_name = parts[0]
         save_folder = parts[1]
         direct_rss_url = parts[2]   #TODO
-        keywords = parts[3:]
+        max_day_interval = parts[3]   # older pub will not be downloaded
+        keywords = int(parts[4:])
 
         full_description = ''.join(parts)
         md5 = hashlib.md5(full_description.encode('utf-8')).hexdigest()
@@ -85,7 +86,7 @@ if __name__ == "__main__":
         parser = GetInstance(source_name)
         if parser and parser.is_available:
             folder_to_root_dir = os.path.join(cloudreve_download_dir, save_folder).replace('\\','/')
-            links, max_timestamp, titles = parser.get_download_data(keywords, last_timestamp)
+            links, max_timestamp, titles = parser.get_download_data(keywords, last_timestamp, max_day_interval)
             if len(links) > 0:  # only call downloading when having something new
                 if cloudreve.create_directory(folder_to_root_dir): # also ok when folder exists
                     is_download_success = cloudreve.add_offline_download_task(links, folder_to_root_dir)
