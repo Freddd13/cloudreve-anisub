@@ -100,7 +100,7 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
 
 
 
-    def get_download_data(self, keywords, last_timestamp):
+    def get_download_data(self, keywords, last_timestamp, max_day_interval):
         # https://acg.rip/page/2?term=%E9%AD%94%E6%B3%95%E4%BD%BF%E7%9A%84%E6%96%B0%E5%A8%98
         entry_links, entry_timestamps, entry_titles = [], [], []
         if not last_timestamp:
@@ -110,6 +110,12 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
             # time_string = "Wed, 04 Oct 2023 08:31:55 -0700"
             dt = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %z")
             this_timestamp = dt.timestamp()
+
+            # season old part check, TODO
+            days_difference = (datetime.now().timestamp() - this_timestamp) / (60 * 60 * 24)
+            logger.debug(f"days_difference: {days_difference}")
+            if days_difference > max_day_interval:
+                logger.warn("ignore old part resources.")
 
             if this_timestamp <= last_timestamp:
                 logger.warn("Nothing new")
