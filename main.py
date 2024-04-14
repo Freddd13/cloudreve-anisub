@@ -1,4 +1,4 @@
-from cloudreve_anisub.cloudreve import Cloudreve
+from cloudreve_anisub.cloudreve_v3 import CloudreveV3
 from cloudreve_anisub.email import EmailHandler
 from cloudreve_anisub.deploy_stragegies import *
 from cloudreve_anisub.utils.proxy_decorator import IS_AUTHOR_ENV
@@ -6,6 +6,8 @@ from cloudreve_anisub.utils.proxy_decorator import IS_AUTHOR_ENV
 from cloudreve_anisub.utils.singleton import GetInstance
 from cloudreve_anisub.utils.logger import LoggerManager
 from cloudreve_anisub.rss_sources.acgrip import ACGripRSSParser
+from cloudreve_anisub.rss_sources.mikan import MikanRSSParser
+
 
 import hashlib
 import os
@@ -13,6 +15,10 @@ import os
 log_manager = LoggerManager(f"log/{__name__}.log")
 logger = log_manager.logger
 
+source_dict = {
+    ACGripRSSParser._name : ACGripRSSParser,
+    MikanRSSParser._name : MikanRSSParser
+}
 
 def parse_last_download(lines):
     last_download = {}
@@ -40,11 +46,7 @@ if __name__ == "__main__":
         os._exit(-1)
 
     ## 1. Init
-    ### instances
-    cloudreve = Cloudreve(strategy.email, strategy.password, strategy.url)
-    email_handler = EmailHandler(strategy.email, strategy.smtp_host, strategy.smtp_port, strategy.mail_license, strategy.receivers)
-    acgrip = ACGripRSSParser(strategy.rss['acgrip'])
-
+    cloudreve = CloudreveV3(strategy.email, strategy.password, strategy.url)
     ### messy params
     sub_filename = "./subscriptions"
     last_download_filename = "./_last_download_signal"
@@ -76,16 +78,19 @@ if __name__ == "__main__":
         direct_rss_url = parts[2]   #TODO
         max_day_interval = int(parts[3])   # older pub will not be downloaded
         keywords = parts[4:]
+        assert(source_name in source_dict.keys())
 
         full_description = ''.join(parts)
         md5 = hashlib.md5(full_description.encode('utf-8')).hexdigest()
         last_timestamp = last_downloads.get(md5, -1)
-        latest_downloads[md5] = last_timestamp
+        latest_downloads[md5] = last_timestamp  #TODO if has direct url, do not calc md5
 
-        parser = GetInstance(source_name)
+        # parser = GetInstance(source_name)
+        parser = source_dict[source_name](strategy.rss[source_name])
         if parser and parser.is_available:
-            folder_to_root_dir = os.path.join(cloudreve_download_dir, save_folder).replace('\\','/')
-            links, max_timestamp, titles = parser.get_download_data(keywords, last_timestamp, max_day_interval)
+            links, max_timestamp, titles, folder_to_root_dir = parser.get_download_data(keywords, last_timestamp, max_day_interval)
+            if not folder_to_root_dir:
+                folder_to_root_dir = os.path.join(cloudreve_download_dir, save_folder).replace('\\','/')
             if len(links) > 0:  # only call downloading when having something new
                 if cloudreve.create_directory(folder_to_root_dir): # also ok when folder exists
                     is_download_success = cloudreve.add_offline_download_task(links, folder_to_root_dir)

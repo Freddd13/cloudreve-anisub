@@ -1,7 +1,7 @@
 '''
 Date: 2023-10-05 10:52:28
 LastEditors: Kumo
-LastEditTime: 2023-10-08 16:55:12
+LastEditTime: 2024-04-14 20:02:27
 Description: 
 '''
 
@@ -29,46 +29,13 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
         self._url = rss_config.url
         self._is_available = True
         self._feed = None
-
-        self.test_source()
+        self._merged = False
 
 
     @property
     def is_available(self):
         return self._is_available
 
-
-    def test_source(self):
-        num_pages_to_check = 1  # TODO
-        all_items = []
-        logger.info("requesting and merging rss data...")
-        for i in range(num_pages_to_check):
-            url = f"{self._url}/page/{i+1}.xml"
-            response = self._http.get(url,proxies=self._proxy_dict)
-            if response.status_code == 200:
-                root = ET.fromstring(response.content)
-                for item in root.findall(".//item"):
-                    all_items.append(ET.tostring(item, encoding="unicode"))
-            else:
-                self._is_available = False            
-                return
-                
-        # merge RSS XML
-        merged_rss = f"""
-        <rss version="2.0">
-        <channel>
-            {''.join(all_items)}
-        </channel>
-        </rss>
-        """
-        self._feed = feedparser.parse(merged_rss)        
-
-        # response = self._http.get(self._url,proxies=self._proxy_dict)
-        # if response.status_code == 200:
-        #     self._feed = feedparser.parse(response.text)
-        #     print(response.text)
-        #     logger.info("Feed Title: " + self._feed.feed.title)
-        #     self._is_available = True
 
 
     def get_latest_entries(self, keywords, direct_rss_url = None):
@@ -129,32 +96,4 @@ class ACGripRSSParser(BaseRSSParser, metaclass=SingletonMeta):
             entry_timestamps.append(this_timestamp)
             entry_titles.append(entry.title)
 
-        return entry_links, max(entry_timestamps) if entry_timestamps else 0, entry_titles
-
-
-    # deprecate
-    # def get_download_data_old(self, keywords, last_timestamp):
-    #     entry_links, entry_timestamps, entry_titles = [], [], []
-    #     if not last_timestamp:
-    #        last_timestamp = -1
-    #     for entry in self._feed.entries:
-    #         # match Keywords
-    #         if not all(keyword in entry.title for keyword in keywords):
-    #             # logger.debug(f"q keywords: {','.join(keywords)}")
-    #             # logger.debug(f"this content: {entry.title}")
-    #             continue
-    #         # time_string = "Wed, 04 Oct 2023 08:31:55 -0700"
-    #         dt = datetime.strptime(entry.published, "%a, %d %b %Y %H:%M:%S %z")
-    #         this_timestamp = dt.timestamp()
-
-    #         if this_timestamp <= last_timestamp:
-    #             logger.warn("Nothing new")
-    #             break
-            
-    #         logger.info("标题:"+entry.title)
-
-    #         entry_links.append(entry.enclosures[0].href)
-    #         entry_timestamps.append(this_timestamp)
-    #         entry_titles.append(entry.title)
-
-    #     return entry_links, max(entry_timestamps) if entry_timestamps else 0
+        return entry_links, max(entry_timestamps) if entry_timestamps else 0, entry_titles, None

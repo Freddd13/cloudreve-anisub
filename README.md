@@ -77,12 +77,12 @@ The schedule task can be adjusted by modifing the ./docker/crontab.
 ## TODO
 - [x] Email notification
 - [ ] Bot notification
-- [ ] Docker support
+- [x] Docker support
 - [ ] More websites support
     - [x] acgrip
     - [ ] dmhy
     - [ ] bgmoe
-    - [ ] mikan
+    - [ ] mikan(under development)
     - [ ] nyaa
 
 

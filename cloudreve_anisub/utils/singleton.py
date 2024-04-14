@@ -1,7 +1,7 @@
 '''
 Date: 2023-10-05 12:42:39
 LastEditors: Kumo
-LastEditTime: 2023-10-05 16:30:23
+LastEditTime: 2024-04-14 19:35:47
 Description: 
 '''
 class SingletonMeta(type):
@@ -11,6 +11,9 @@ class SingletonMeta(type):
         if cls not in cls._instances:
             instance = super().__call__(*args, **kwargs)
             cls._instances[cls] = instance
+            print(f"created {cls}")
+        else:
+            print(f"reused {cls}")
         return cls._instances[cls]
 
 

@@ -21,6 +21,10 @@ RSS:
     enable: false
     url: https://acg.rip/.xml
 
+AI:
+  api_prefix: http://api.openai.com
+  api_key: 1145141919810hengaaaaaaaa
+
     
 Email:
   enable_email_notify: 0
