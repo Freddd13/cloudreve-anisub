@@ -124,8 +124,8 @@ if __name__ == "__main__":
     logger.info("summary: ")
     if all_tasks_success:
         if num_newly_downloads > 0:
-            subject = "Successfully downloading animes."
-            content = "Successfully downloading the following anime(s):\n{}".format('\n'.join([str(title) for title in titles_newly_download]))
+            subject = "Successfully download animes."
+            content = "Successfully download the following anime(s):\n{}".format('\n'.join([str(title) for title in titles_newly_download]))
             logger.info("All animes start to download successfully.")
 
         else:   # nothing new
