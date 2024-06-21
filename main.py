@@ -122,19 +122,20 @@ if __name__ == "__main__":
     ## 4. check result and prepare mail data
     logger.info("=" * 50)
     logger.info("summary: ")
+    repo_prefix = "AniSub: "
     if all_tasks_success:
         if num_newly_downloads > 0:
-            subject = "Successfully download animes."
+            subject = f"{repo_prefix}Successfully download animes."
             content = "Successfully download the following anime(s):\n{}".format('\n'.join([str(title) for title in titles_newly_download]))
             logger.info("All animes start to download successfully.")
 
         else:   # nothing new
-            subject = "There's no new anime updated."
+            subject = f"{repo_prefix}There's no new anime updated."
             content = "There's no new anime!"
             logger.info("There's no new anime")
 
     else:   # download error
-        subject = "Failed to download all animes."
+        subject = f"{repo_prefix}Failed to download all animes."
         content = "Failed..."
         logger.error("Failed to download all animes.")
     logger.info("=" * 50)
