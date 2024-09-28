@@ -67,6 +67,13 @@ class GithubActionStrategy(BaseStrategy):
         self.smtp_host = os.environ.get('Email_smtp_host')
         self.smtp_port = os.environ.get('Email_smtp_port')
         self.mail_license = os.environ.get('Email_mail_license') 
+        self.send_logs = os.environ.get('Email_send_logs') 
+
+        ## outlook oauth app params
+        self.use_oauth2_outlook = bool(os.environ.get('use_oauth2_outlook'))
+        self.outlook_client_id = os.environ.get('outlook_client_id')
+        self.outlook_client_secret = os.environ.get('outlook_client_secret')
+        self.outlook_redirect_uri = os.environ.get('outlook_redirect_uri')
 
         # private
         # self._github_repo_token = os.environ.get('GITHUB_REPO_TOKEN')
@@ -96,12 +103,21 @@ class DockerStrategy(BaseStrategy):
         self.rss["mikan"] = RSSSourceConfig(rss_config['mikan']['enable'], rss_config['mikan']['url'])
         self.rss["nyaa"] = RSSSourceConfig(rss_config['nyaa']['enable'], rss_config['nyaa']['url'])
 
-        self.enable_email_notify = bool(yaml_data['Email']['enable_email_notify'])
-        self.sender = yaml_data['Email']['sender']
-        self.receivers = yaml_data['Email']['receivers']
-        self.smtp_host = yaml_data['Email']['smtp_host']
-        self.smtp_port = yaml_data['Email']['smtp_port']
-        self.mail_license = yaml_data['Email']['mail_license']
+        # email
+        ## basic
+        self.enable_email_notify = bool(yaml_data.get('Email', {}).get('enable_email_notify', False))
+        self.sender = yaml_data.get('Email', {}).get('sender', None)
+        self.receivers = yaml_data.get('Email', {}).get('receivers', None)
+        self.smtp_host = yaml_data.get('Email', {}).get('smtp_host', None)
+        self.smtp_port = yaml_data.get('Email', {}).get('smtp_port', None)
+        self.mail_license = yaml_data.get('Email', {}).get('mail_license', None)
+        self.send_logs = yaml_data.get('Email', {}).get('send_logs', False)
+
+        ## outlook oauth app params
+        self.use_oauth2_outlook = bool(yaml_data.get('Email', {}).get('use_oauth2_outlook', False))
+        self.outlook_client_id = yaml_data.get('Email', {}).get('outlook_client_id', None)
+        self.outlook_client_secret = yaml_data.get('Email', {}).get('outlook_client_secret', None)
+        self.outlook_redirect_uri = yaml_data.get('Email', {}).get('outlook_redirect_uri', None)
 
 
 @log_manager.apply_log_method_to_all_methods
@@ -127,10 +143,20 @@ class LocalStrategy(BaseStrategy):
         self.rss["mikan"] = RSSSourceConfig(rss_config['mikan']['enable'], rss_config['mikan']['url'])
         self.rss["nyaa"] = RSSSourceConfig(rss_config['nyaa']['enable'], rss_config['nyaa']['url'])
 
-        self.enable_email_notify = bool(yaml_data['Email']['enable_email_notify'])
-        self.sender = yaml_data['Email']['sender']
-        self.receivers = yaml_data['Email']['receivers']
-        self.smtp_host = yaml_data['Email']['smtp_host']
-        self.smtp_port = yaml_data['Email']['smtp_port']
-        self.mail_license = yaml_data['Email']['mail_license']
+        # email
+        ## basic
+        self.enable_email_notify = bool(yaml_data.get('Email', {}).get('enable_email_notify', False))
+        self.sender = yaml_data.get('Email', {}).get('sender', None)
+        self.receivers = yaml_data.get('Email', {}).get('receivers', None)
+        self.smtp_host = yaml_data.get('Email', {}).get('smtp_host', None)
+        self.smtp_port = yaml_data.get('Email', {}).get('smtp_port', None)
+        self.mail_license = yaml_data.get('Email', {}).get('mail_license', None)
+        self.send_logs = yaml_data.get('Email', {}).get('send_logs', False)
+
+        ## outlook oauth app params
+        self.use_oauth2_outlook = bool(yaml_data.get('Email', {}).get('use_oauth2_outlook', False))
+        self.outlook_client_id = yaml_data.get('Email', {}).get('outlook_client_id', None)
+        self.outlook_client_secret = yaml_data.get('Email', {}).get('outlook_client_secret', None)
+        self.outlook_redirect_uri = yaml_data.get('Email', {}).get('outlook_redirect_uri', None)
+
        

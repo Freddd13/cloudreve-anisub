@@ -8,12 +8,15 @@ from cloudreve_anisub.utils.logger import LoggerManager
 from cloudreve_anisub.rss_sources.acgrip import ACGripRSSParser
 from cloudreve_anisub.rss_sources.mikan import MikanRSSParser
 
+from cloudreve_anisub.ms_auth import MSAuth
 
 import hashlib
 import os
+import base64
 
 log_manager = LoggerManager(f"log/{__name__}.log")
 logger = log_manager.logger
+ERROR_MSGS = []
 
 source_dict = {
     ACGripRSSParser._name : ACGripRSSParser,
@@ -27,6 +30,17 @@ def parse_last_download(lines):
         last_download[md5] = float(timestamp)
     return last_download
 
+def collect_errors(err):
+    logger.error(err)
+    ERROR_MSGS.append(err)
+
+def generate_xoauth2(username, token):
+    xoauth = "user=%s\x01auth=Bearer %s\x01\x01" % (username, token)
+    xoauth = xoauth.encode("ascii")
+    xoauth = base64.b64encode(xoauth)
+    xoauth = xoauth.decode("ascii")
+    # print("XOAUTH2: ", xoauth)
+    return xoauth
 
 if __name__ == "__main__":
     ## 0. get config
@@ -101,16 +115,16 @@ if __name__ == "__main__":
                         logger.info(f"Successfully download {len(links)} links into {save_folder}.")
                     else:   # failed when downloading
                         all_tasks_success = False
-                        logger.error(f"Failed when downloading {keywords} in RSS source {source_name}.")
+                        collect_errors(f"Failed when downloading {keywords} in RSS source {source_name}.")
                 else:       # failed when create folder
                     all_tasks_success = False
-                    logger.error(f"Failed when create_directory {save_folder} in cloudreve.")
+                    collect_errors(f"Failed when create_directory {save_folder} in cloudreve.")
             else:   # nothing new
                 logger.warning("No new link found")
 
         else:   # failed when getting parser
             all_tasks_success = False
-            logger.error(f"RSS source {source_name} is not available.")
+            lcollect_errors(f"RSS source {source_name} is not available.")
 
 
     ###  update download data
@@ -136,14 +150,76 @@ if __name__ == "__main__":
     else:   # download error
         subject = "Failed to download all animes."
         content = "Failed..."
-        logger.error("Failed to download all animes.")
+        collect_errors("Failed to download all animes.")
     logger.info("=" * 50)
 
-
-    ## 5. send email
+    ## 7. send email
     if strategy.enable_email_notify:
-        email_handler = EmailHandler(strategy.sender, strategy.smtp_host, strategy.smtp_port, strategy.mail_license, strategy.receivers)
-        email_handler.perform_sending(subject, content, files=LoggerManager.get_all_log_filenames())
+        ### check result and prepare mail data
+        logger.info("=" * 50)
+        logger.info("summary: ")
+        has_error_prefix = "[ERROR] " if len(ERROR_MSGS) > 0 else ""
+        if all_tasks_success:
+            if num_newly_downloads > 0:
+                subject = f"{has_error_prefix}Successfully downloading animes."
+                content = "Success downloading the following anime(s):\n{}".format(
+                    "\n".join([title for title in titles_newly_download])
+                )
+                logger.info("All animes start to download successfully.")
+
+            else:  # nothing new
+                subject = f"{has_error_prefix}There's no new anime updated."
+                content = "There's no new anime!"
+                logger.info("There's no new shanimeeet")
+
+        else:  # download error
+            subject = f"{has_error_prefix}Failed to download all animes."
+            content = "Failed..."
+            collect_errors("Failed to download all animes.")
+
+        if has_error_prefix:
+            content += "ERROR msgs: \n{}".format("\n".join([err for err in ERROR_MSGS]))
+        logger.info("=" * 50)
+
+        if strategy.use_oauth2_outlook:
+            ms_auther = MSAuth(
+                strategy.outlook_client_id,
+                strategy.outlook_client_secret,
+                strategy.outlook_redirect_uri,
+                ["https://outlook.office.com/SMTP.Send", "offline_access"],
+                "_outlook_refresh_token",
+            )
+            ms_access_token = ms_auther.get_access_token()
+            if not ms_access_token:
+                os._exit(-1)
+            else:
+                xoauth = generate_xoauth2(strategy.sender, ms_access_token)
+                email_handler = EmailHandler(
+                    strategy.sender,
+                    strategy.smtp_host,
+                    strategy.smtp_port,
+                    strategy.mail_license,
+                    strategy.receivers,
+                    xoauth=xoauth,
+                )
+        else:
+            email_handler = EmailHandler(
+                strategy.sender,
+                strategy.smtp_host,
+                strategy.smtp_port,
+                strategy.mail_license,
+                strategy.receivers,
+            )
+            
+        if not email_handler.perform_sending(
+            subject,
+            content,
+            files=(
+                LoggerManager.get_all_log_filenames() if strategy.send_logs else []
+            ),
+        ):
+            os._exit(-1)
+
 
 
 
