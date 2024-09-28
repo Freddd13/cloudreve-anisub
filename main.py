@@ -210,11 +210,11 @@ if __name__ == "__main__":
                 strategy.mail_license,
                 strategy.receivers,
             )
-            
+
         if not email_handler.perform_sending(
             subject,
             content,
-            files=(
+            log_files=(
                 LoggerManager.get_all_log_filenames() if strategy.send_logs else []
             ),
         ):
